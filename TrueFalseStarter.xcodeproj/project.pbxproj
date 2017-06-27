@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D3F492B1F01CC8E00F17A13 /* QuestionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3F492A1F01CC8E00F17A13 /* QuestionModel.swift */; };
 		2D9B29361EFD707C004905B1 /* questionFive.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2D9B29301EFD707C004905B1 /* questionFive.wav */; };
 		2D9B29371EFD707C004905B1 /* questionFour.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2D9B29311EFD707C004905B1 /* questionFour.wav */; };
 		2D9B29381EFD707C004905B1 /* questionOne.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2D9B29321EFD707C004905B1 /* questionOne.wav */; };
 		2D9B29391EFD707C004905B1 /* questionSix.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2D9B29331EFD707C004905B1 /* questionSix.wav */; };
 		2D9B293A1EFD707C004905B1 /* questionThree.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2D9B29341EFD707C004905B1 /* questionThree.wav */; };
 		2D9B293B1EFD707C004905B1 /* questionTwo.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2D9B29351EFD707C004905B1 /* questionTwo.wav */; };
-		2D9B29411EFD75CD004905B1 /* QuestionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B29401EFD75CD004905B1 /* QuestionData.swift */; };
 		2D9B29451EFD9068004905B1 /* SoundModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B29441EFD9068004905B1 /* SoundModel.swift */; };
 		2D9B29491EFDA3A9004905B1 /* Wrong.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2D9B29481EFDA3A9004905B1 /* Wrong.wav */; };
 		97093D3C1C913506001275BC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97093D3B1C913506001275BC /* AppDelegate.swift */; };
@@ -25,13 +25,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2D3F492A1F01CC8E00F17A13 /* QuestionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionModel.swift; sourceTree = "<group>"; };
 		2D9B29301EFD707C004905B1 /* questionFive.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = questionFive.wav; path = "../../../Quiz Music/questionFive.wav"; sourceTree = "<group>"; };
 		2D9B29311EFD707C004905B1 /* questionFour.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = questionFour.wav; path = "../../../Quiz Music/questionFour.wav"; sourceTree = "<group>"; };
 		2D9B29321EFD707C004905B1 /* questionOne.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = questionOne.wav; path = "../../../Quiz Music/questionOne.wav"; sourceTree = "<group>"; };
 		2D9B29331EFD707C004905B1 /* questionSix.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = questionSix.wav; path = "../../../Quiz Music/questionSix.wav"; sourceTree = "<group>"; };
 		2D9B29341EFD707C004905B1 /* questionThree.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = questionThree.wav; path = "../../../Quiz Music/questionThree.wav"; sourceTree = "<group>"; };
 		2D9B29351EFD707C004905B1 /* questionTwo.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = questionTwo.wav; path = "../../../Quiz Music/questionTwo.wav"; sourceTree = "<group>"; };
-		2D9B29401EFD75CD004905B1 /* QuestionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionData.swift; sourceTree = "<group>"; };
 		2D9B29441EFD9068004905B1 /* SoundModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundModel.swift; sourceTree = "<group>"; };
 		2D9B29481EFDA3A9004905B1 /* Wrong.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Wrong.wav; path = "../../../Quiz Music/Wrong.wav"; sourceTree = "<group>"; };
 		97093D381C913506001275BC /* TrueFalseStarter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrueFalseStarter.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,8 +75,8 @@
 			isa = PBXGroup;
 			children = (
 				97093D3B1C913506001275BC /* AppDelegate.swift */,
+				2D3F492A1F01CC8E00F17A13 /* QuestionModel.swift */,
 				2D9B29441EFD9068004905B1 /* SoundModel.swift */,
-				2D9B29401EFD75CD004905B1 /* QuestionData.swift */,
 				97093D3D1C913506001275BC /* ViewController.swift */,
 				97093D3F1C913506001275BC /* Main.storyboard */,
 				97093D421C913506001275BC /* Assets.xcassets */,
@@ -178,7 +178,7 @@
 				97093D3E1C913506001275BC /* ViewController.swift in Sources */,
 				2D9B29451EFD9068004905B1 /* SoundModel.swift in Sources */,
 				97093D3C1C913506001275BC /* AppDelegate.swift in Sources */,
-				2D9B29411EFD75CD004905B1 /* QuestionData.swift in Sources */,
+				2D3F492B1F01CC8E00F17A13 /* QuestionModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

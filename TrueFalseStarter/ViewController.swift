@@ -17,23 +17,34 @@ class ViewController: UIViewController {
     var correctQuestions = 0
     var correctAnswersInARow = 0
     
-    var displayedQuestion = QuestionData()
-    var currentQuestionIndex = 0
+                //var displayedQuestion = QuestionData()
+                //var currentQuestionIndex = 0
+    
     /// this number keeps track of correct answers
-    var currentAnswerIndex = 0
+                //var currentAnswerIndex = 0
 
+    var quizQuestionSet = [QuestionModel]()
+    var possibleAnswers = [String]()
     
     var gameSound: SystemSoundID = 0
-    
+    /*
     var questionsInQuiz = QuestionData()
+     @IBOutlet weak var answerOne: UIButton!
+     @IBOutlet weak var Answer1: UIButton!
+     @IBOutlet weak var answer1: UIButton!
     var numberOfQuestionsInQuiz = [Int]()
     var questionSet = [String]()
     var answerSet = [String]()
-    
+    */
     
     @IBOutlet weak var questionField: UILabel!
-    @IBOutlet weak var trueButton: UIButton!
-    @IBOutlet weak var falseButton: UIButton!
+    @IBOutlet weak var answer1: UIButton!
+    @IBOutlet weak var answer2: UIButton!
+    @IBOutlet weak var answer3: UIButton!
+    @IBOutlet weak var answer4: UIButton!
+    
+    
+    
     @IBOutlet weak var playAgainButton: UIButton!
     
 
@@ -44,12 +55,20 @@ class ViewController: UIViewController {
         // Start game
         playGameStartSound()
     
-        numberOfQuestionsInQuiz = questionsInQuiz.indexArray(withNumberOfIndexes: 5)
-        questionSet = questionsInQuiz.displayQuestion(fromQuestionsList: numberOfQuestionsInQuiz).questions
-        answerSet = questionsInQuiz.displayQuestion(fromQuestionsList: numberOfQuestionsInQuiz).answers
-        let firstQuestion = questionSet[0]
+        quizQuestionSet = QuestionSets().randomQuestionSets(forNumberOfQuestionsInQuiz: 6)
+        let firstQuestion = quizQuestionSet[questionsAsked].question
         questionField.text = firstQuestion
-        currentAnswerIndex = 0
+        
+        
+        
+        
+        let answersToQuestion = quizQuestionSet[questionsAsked].randomAnswersForButtons()
+        answer1.setTitle(answersToQuestion[0], for: .normal)
+        answer2.setTitle(answersToQuestion[1], for: .normal)
+        answer3.setTitle(answersToQuestion[2], for: .normal)
+        answer4.setTitle(answersToQuestion[3], for: .normal)
+        
+        
         playAgainButton.isHidden = true
     }
 
@@ -61,9 +80,10 @@ class ViewController: UIViewController {
     
     func displayScore() {
         // Hide the answer buttons
-        trueButton.isHidden = true
-        falseButton.isHidden = true
-        
+        answer1.isHidden = true
+        answer2.isHidden = true
+        answer3.isHidden = true
+        answer4.isHidden = true
         // Display play again button
         playAgainButton.isHidden = false
         
@@ -71,15 +91,15 @@ class ViewController: UIViewController {
         correctAnswersInARow = 0
         
     }
-    
     @IBAction func checkAnswer(_ sender: UIButton) {
         // Increment the questions asked counter
-        questionsAsked += 1
+        
         
        
-        let correctAnswer = answerSet[currentAnswerIndex]
+        let correctAnswer = quizQuestionSet[questionsAsked].answer
         
-        if (sender === trueButton &&  correctAnswer == "True") || (sender === falseButton && correctAnswer == "False") {
+        if (sender === answer1 &&  correctAnswer == answer1.titleLabel?.text) || (sender === answer2 && correctAnswer == answer2.titleLabel?.text) || (sender === answer3 && correctAnswer == answer3.titleLabel?.text) || (sender === answer4 && correctAnswer == answer4.titleLabel?.text) {
+            
             correctQuestions += 1
             correctAnswersInARow += 1
             
@@ -103,12 +123,14 @@ class ViewController: UIViewController {
                 playGameStartSound()
             }
             questionField.text = "Correct!"
+            questionsAsked += 1
         } else {
             
             questionField.text = "Sorry, wrong answer!"
             loadGameStartSound(forSound: Sounds().wrong)
             playGameStartSound()
             correctAnswersInARow = 0
+            questionsAsked += 1
         }
         
         loadNextRoundWithDelay(seconds: 2)
@@ -121,29 +143,39 @@ class ViewController: UIViewController {
             
         } else {
             // Continue game
-            currentQuestionIndex += 1
-            let nextQestion = questionSet[currentQuestionIndex]
+            
+            let nextQestion = quizQuestionSet[questionsAsked].question
             questionField.text = nextQestion
-            currentAnswerIndex += 1
+            let answersToQuestion = quizQuestionSet[questionsAsked].randomAnswersForButtons()
+            answer1.setTitle(answersToQuestion[0], for: .normal)
+            answer2.setTitle(answersToQuestion[1], for: .normal)
+            answer3.setTitle(answersToQuestion[2], for: .normal)
+            answer4.setTitle(answersToQuestion[3], for: .normal)
         
         }
     }
     
     @IBAction func playAgain() {
         // Show the answer buttons
-        trueButton.isHidden = false
-        falseButton.isHidden = false
+        answer1.isHidden = false
+        answer2.isHidden = false
+        answer3.isHidden = false
+        answer4.isHidden = false
         playAgainButton.isHidden = true
         
         questionsAsked = 0
         correctQuestions = 0
-        currentAnswerIndex = 0
-        currentQuestionIndex = 0
-        numberOfQuestionsInQuiz = questionsInQuiz.indexArray(withNumberOfIndexes: 5)
-        questionSet = questionsInQuiz.displayQuestion(fromQuestionsList: numberOfQuestionsInQuiz).questions
-        answerSet = questionsInQuiz.displayQuestion(fromQuestionsList: numberOfQuestionsInQuiz).answers
-        let newQuestion = questionSet[0]
+        
+        quizQuestionSet = QuestionSets().randomQuestionSets(forNumberOfQuestionsInQuiz: 6)
+        let newQuestionSet = quizQuestionSet[questionsAsked]
+        let newQuestion = newQuestionSet.question
         questionField.text = newQuestion
+        
+        possibleAnswers = newQuestionSet.randomAnswersForButtons()
+        answer1.setTitle(possibleAnswers[0], for: .normal)
+        answer2.setTitle(possibleAnswers[1], for: .normal)
+        answer3.setTitle(possibleAnswers[2], for: .normal)
+        answer4.setTitle(possibleAnswers[3], for: .normal)
     }
     
 
