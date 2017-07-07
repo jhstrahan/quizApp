@@ -39,16 +39,16 @@ struct QuestionModel {
 }
 
 struct QuestionSets {
-    let questionSet1 = QuestionModel(question: "Paul introduces himself as an apostle of Christ Jesus by what?", answer: "the command of God", possibleAnswerOne: "his choice to obey", possibleAnswerTwo: "the vote of the church", possibleAnswerThree: "his love for the nations")
-    let questionSet2 = QuestionModel(question: "Paul calls Timothy his ______", answer: "true child in the faith", possibleAnswerOne: "close friend in Christ", possibleAnswerTwo: "dicsiple", possibleAnswerThree: "partner in ministry")
-    let questionSet3 = QuestionModel(question: "Paul is asking Timothy to remain in Ephesus. Why?", answer: "To correct a teaching problem in the church", possibleAnswerOne: "To collect money", possibleAnswerTwo: "To perform miracles", possibleAnswerThree: "to deliver a letter")
-    let questionSet4 = QuestionModel(question: "Teachers in Ephesus were ______", answer: "all to the above", possibleAnswerOne: "teaching false doctrine", possibleAnswerTwo: "arguing about meaningless things", possibleAnswerThree: "focused on the wrong goal")
-    let questionSet5 = QuestionModel(question: "According to Paul, the law is good if ______?", answer: "it is used lawfully", possibleAnswerOne: "it is read in Hebrew", possibleAnswerTwo: "it is written down", possibleAnswerThree: "it applies to our situation")
-    let questionSet6 = QuestionModel(question: "What does Paul mean when he says that the law is not for the just?", answer: "The law does not depense grace.", possibleAnswerOne: "The just don't have to obey God.", possibleAnswerTwo: "The law isn't useful anymore.", possibleAnswerThree: "The law is only for people who believe it.")
-    let questionSet7 = QuestionModel(question: "From where did Paul receive strength?", answer: "Christ Jesus", possibleAnswerOne: "the Word", possibleAnswerTwo: "the church", possibleAnswerThree: "the law")
-    let questionSet8 = QuestionModel(question: "Why did Paul receive mercy?", answer: "He acted in unbelief.", possibleAnswerOne: "He performed the right services.", possibleAnswerTwo: "He paid enough money to the church.", possibleAnswerThree: "He deserved it.")
-    let questionSet9 = QuestionModel(question: "Paul views himself as ______", answer: "a picture of God's patience", possibleAnswerOne: "a super Christian", possibleAnswerTwo: "an important person", possibleAnswerThree: "a master teacher")
-    let questionSet10 = QuestionModel(question: "Why does Paul charge Timothy to wage the good warefare?", answer: "The problem was spiritual.", possibleAnswerOne: "It has a ring to it.", possibleAnswerTwo: "Timothy would lead an army.", possibleAnswerThree: "Paul is dramatic.")
+    let questionSet1 = QuestionModel(question: "Which planet in our solar system has the most oxygen?", answer: "Earth", possibleAnswerOne: "Saturn", possibleAnswerTwo: "Pluto", possibleAnswerThree: "Mars")
+    let questionSet2 = QuestionModel(question: "What is the largest planet in our solar system?", answer: "Jupiter", possibleAnswerOne: "Neptune", possibleAnswerTwo: "Saturn", possibleAnswerThree: "Sun")
+    let questionSet3 = QuestionModel(question: "What is the chemical symbol for table salt?", answer: "NaCl", possibleAnswerOne: "H2O", possibleAnswerTwo: "Sa", possibleAnswerThree: "Cl")
+    let questionSet4 = QuestionModel(question: "In what year did the French revolution began?", answer: "1789", possibleAnswerOne: "1780", possibleAnswerTwo: "1812", possibleAnswerThree: "1788")
+    let questionSet5 = QuestionModel(question: "How many feet are in a mile?", answer: "5280", possibleAnswerOne: "5000", possibleAnswerTwo: "4280", possibleAnswerThree: "5820")
+    let questionSet6 = QuestionModel(question: "The term wake, kettle, or committee refers to a group of what bird?", answer: "Vulture", possibleAnswerOne: "Crow", possibleAnswerTwo: "Red Bird", possibleAnswerThree: "Humming Bird")
+    let questionSet7 = QuestionModel(question: "Which of the traditional five senses are dolphins believed not to possess?", answer: "smell", possibleAnswerOne: "sight", possibleAnswerTwo: "touch", possibleAnswerThree: "taste")
+    let questionSet8 = QuestionModel(question: "Flamboyance is a group of what animal?", answer: "Flamingos", possibleAnswerOne: "Owls", possibleAnswerTwo: "Monkeys", possibleAnswerThree: "Cats")
+    let questionSet9 = QuestionModel(question: "The Chihauahua is a breed of dog believed to originate from what country?", answer: "Mexico", possibleAnswerOne: "Alaska", possibleAnswerTwo: "Europe", possibleAnswerThree: "Spain")
+    let questionSet10 = QuestionModel(question: "What is a group of whales called?", answer: "A pod", possibleAnswerOne: "A group", possibleAnswerTwo: "A family", possibleAnswerThree: "A mass")
     
     
     

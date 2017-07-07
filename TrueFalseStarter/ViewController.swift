@@ -12,39 +12,33 @@ import AudioToolbox
 
 class ViewController: UIViewController {
     
+    // stored values for conters and number of questions per round
     let questionsPerRound = 5
     var questionsAsked = 0
     var correctQuestions = 0
     var correctAnswersInARow = 0
     
-                //var displayedQuestion = QuestionData()
-                //var currentQuestionIndex = 0
     
-    /// this number keeps track of correct answers
-                //var currentAnswerIndex = 0
-
+    // stored values for lightening round
+    var lighteningTimer = Timer()
+    var lighteningRound = Bool()
+    var seconds = 15
+    var isTimerRunning = false
+    
+    // stored values for the quiz questions and answers
     var quizQuestionSet = [QuestionModel]()
     var possibleAnswers = [String]()
     
     var gameSound: SystemSoundID = 0
-    /*
-    var questionsInQuiz = QuestionData()
-     @IBOutlet weak var answerOne: UIButton!
-     @IBOutlet weak var Answer1: UIButton!
-     @IBOutlet weak var answer1: UIButton!
-    var numberOfQuestionsInQuiz = [Int]()
-    var questionSet = [String]()
-    var answerSet = [String]()
-    */
+    
     
     @IBOutlet weak var questionField: UILabel!
+    @IBOutlet weak var correctWrong: UILabel!
+    @IBOutlet weak var lighteningCountDown: UILabel!
     @IBOutlet weak var answer1: UIButton!
     @IBOutlet weak var answer2: UIButton!
     @IBOutlet weak var answer3: UIButton!
     @IBOutlet weak var answer4: UIButton!
-    
-    
-    
     @IBOutlet weak var playAgainButton: UIButton!
     
 
@@ -53,7 +47,11 @@ class ViewController: UIViewController {
         loadGameStartSound(forSound: Sounds().start)
         
         // Start game
+        lighteningRound = true
+        lighteningRoundWithDelay(ofSeconds: 10)
         playGameStartSound()
+        correctWrong.alpha = 0
+        lighteningCountDown.alpha = 0
     
         quizQuestionSet = QuestionSets().randomQuestionSets(forNumberOfQuestionsInQuiz: 6)
         let firstQuestion = quizQuestionSet[questionsAsked].question
@@ -62,6 +60,16 @@ class ViewController: UIViewController {
         
         
         
+        
+        
+        // round the corners of each buttion
+        answer1.layer.cornerRadius = 10
+        answer2.layer.cornerRadius = 10
+        answer3.layer.cornerRadius = 10
+        answer4.layer.cornerRadius = 10
+        
+        // set titiles for buttons from asnwers to question.
+        // questionsAsked provides an index of the array of quizQuestionSet
         let answersToQuestion = quizQuestionSet[questionsAsked].randomAnswersForButtons()
         answer1.setTitle(answersToQuestion[0], for: .normal)
         answer2.setTitle(answersToQuestion[1], for: .normal)
@@ -70,6 +78,7 @@ class ViewController: UIViewController {
         
         
         playAgainButton.isHidden = true
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -100,6 +109,8 @@ class ViewController: UIViewController {
         
         if (sender === answer1 &&  correctAnswer == answer1.titleLabel?.text) || (sender === answer2 && correctAnswer == answer2.titleLabel?.text) || (sender === answer3 && correctAnswer == answer3.titleLabel?.text) || (sender === answer4 && correctAnswer == answer4.titleLabel?.text) {
             
+            dimButtons(exceptChosen: sender)
+            // play sounds corresponding with correctAnswersInARow
             correctQuestions += 1
             correctAnswersInARow += 1
             
@@ -122,28 +133,47 @@ class ViewController: UIViewController {
                 loadGameStartSound(forSound: Sounds().correct6)
                 playGameStartSound()
             }
-            questionField.text = "Correct!"
+            correctWrong.alpha = 1
+            correctWrong.textColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
+            correctWrong.text = "Correct!"
             questionsAsked += 1
         } else {
+            correctWrong.alpha = 1
+            correctWrong.textColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+            correctWrong.text = "The correct answer is \(correctAnswer)"
             
-            questionField.text = "Sorry, wrong answer!"
+            dimButtons(exceptChosen: sender)
             loadGameStartSound(forSound: Sounds().wrong)
             playGameStartSound()
             correctAnswersInARow = 0
             questionsAsked += 1
         }
+        if Int(lighteningCountDown.text!)! >= 4 {
+            loadNextRoundWithDelay(seconds: 2)
+        } else if questionsAsked == 4 {
+            nextRound()
+        }
         
-        loadNextRoundWithDelay(seconds: 2)
     }
     
     func nextRound() {
         if questionsAsked == questionsPerRound {
             // Game is over
             displayScore()
+            self.view.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
+            lighteningRound = false
+            
+            lighteningTimer.invalidate()
+            lighteningCountDown.alpha = 0
+            correctWrong.alpha = 0
+            questionField.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            seconds = 15
+            lighteningCountDown.text = timeString(time: TimeInterval(seconds))
             
         } else {
             // Continue game
-            
+            brightenButtons()
+            correctWrong.alpha = 0
             let nextQestion = quizQuestionSet[questionsAsked].question
             questionField.text = nextQestion
             let answersToQuestion = quizQuestionSet[questionsAsked].randomAnswersForButtons()
@@ -161,6 +191,7 @@ class ViewController: UIViewController {
         answer2.isHidden = false
         answer3.isHidden = false
         answer4.isHidden = false
+        
         playAgainButton.isHidden = true
         
         questionsAsked = 0
@@ -176,12 +207,20 @@ class ViewController: UIViewController {
         answer2.setTitle(possibleAnswers[1], for: .normal)
         answer3.setTitle(possibleAnswers[2], for: .normal)
         answer4.setTitle(possibleAnswers[3], for: .normal)
+        
+        lighteningRoundWithDelay(ofSeconds: 10)
+        self.view.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
+        questionField.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        correctWrong.alpha = 0
+        brightenButtons()
+        seconds = 15
+        lighteningCountDown.text = timeString(time: TimeInterval(seconds))
     }
     
 
     
     // MARK: Helper Methods
-    
+            // Quiz timing to start lightening round
     func loadNextRoundWithDelay(seconds: Int) {
         // Converts a delay in seconds to nanoseconds as signed 64 bit integer
         let delay = Int64(NSEC_PER_SEC * UInt64(seconds))
@@ -194,6 +233,70 @@ class ViewController: UIViewController {
         }
     }
     
+    
+    func lighteningRoundWithRemaining(seconds: Int) {
+        let totalTime = Int64(NSEC_PER_SEC * UInt64(seconds))
+        let dispatchTime = DispatchTime.now() + Double(totalTime) / Double(NSEC_PER_SEC)
+        
+        DispatchQueue.main.asyncAfter(deadline: dispatchTime) {
+            if self.lighteningRound == true {
+                self.view.backgroundColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
+                self.displayScore()
+                self.correctWrong.alpha = 1
+                self.correctWrong.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+                self.correctWrong.text = "Time's up!"
+                self.lighteningCountDown.alpha = 0
+                self.lighteningTimer.invalidate()
+                
+            } else {
+                print("game over")
+            }
+        }
+        
+    }
+    
+    func lighteningRoundWithDelay(ofSeconds start: Int) {
+        let regularTime = Int64(NSEC_PER_SEC * UInt64(start))
+        
+        let startLighteningRound = DispatchTime.now() + Double(regularTime) / Double(NSEC_PER_SEC)
+        
+        
+        
+            if lighteningRound == true {
+                DispatchQueue.main.asyncAfter(deadline: startLighteningRound) {
+                    self.view.backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
+                    self.questionField.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+                    self.loadGameStartSound(forSound: Sounds().start)
+                    self.playGameStartSound()
+                    self.lighteningRoundWithRemaining(seconds: 15)
+                    self.lighteningCountDown.alpha = 1
+                    self.runTimer()
+                    
+            }
+        }
+    }
+    
+            // Timer during lightening mode
+    func runTimer() {
+        lighteningTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(ViewController.updateTimer)), userInfo: nil, repeats: true)
+    }
+    
+    func updateTimer() {
+        seconds -= 1
+        if Int(lighteningCountDown.text!)! >= 1 {
+            lighteningCountDown.text = timeString(time: TimeInterval(seconds))
+        } else {
+            lighteningCountDown.alpha = 0
+        }
+    }
+    
+    func timeString(time: TimeInterval) -> String {
+        let seconds = Int(time) % 60
+        return String(seconds)
+    }
+    
+    
+            // loading and playing sounds
     func loadGameStartSound(forSound sound: String) {
         let pathToSoundFile = Bundle.main.path(forResource: sound, ofType: "wav")
         let soundURL = URL(fileURLWithPath: pathToSoundFile!)
@@ -203,6 +306,25 @@ class ViewController: UIViewController {
     func playGameStartSound() {
         AudioServicesPlaySystemSound(gameSound)
     }
- 
+    
+    // dim buttons not chosen
+    func dimButtons(exceptChosen button: UIButton) {
+        let buttonArray = [answer1, answer2, answer3, answer4]
+        for buttons in buttonArray {
+            if button != buttons {
+                buttons?.alpha = 0.5
+            }
+        }
+    }
+    
+    // brighten all buttons
+    func brightenButtons() {
+        let buttonArray = [answer1, answer2, answer3, answer4]
+        for buttons in buttonArray {
+            
+            buttons?.alpha = 1
+        
+        }
+    }
 }
 
