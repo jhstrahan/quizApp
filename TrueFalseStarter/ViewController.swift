@@ -71,12 +71,15 @@ class ViewController: UIViewController {
         
         // set titiles for buttons from asnwers to question.
         // questionsAsked provides an index of the array of quizQuestionSet
-        let answersToQuestion = quizQuestionSet[questionsAsked].randomAnswersForButtons()
+        let answersToQuestion = quizQuestionSet[questionsAsked].randomAnswersForNumber(ofButtons: quizQuestionSet[questionsAsked].numberOfPossibleAnswersToQuestion())
+        setTitleForButtonsWith(answers: answersToQuestion)
+        
+        /*
         answer1.setTitle(answersToQuestion[0], for: .normal)
         answer2.setTitle(answersToQuestion[1], for: .normal)
         answer3.setTitle(answersToQuestion[2], for: .normal)
         answer4.setTitle(answersToQuestion[3], for: .normal)
-        
+        */
         
         playAgainButton.isHidden = true
         
@@ -150,9 +153,9 @@ class ViewController: UIViewController {
             correctAnswersInARow = 0
             questionsAsked += 1
         }
-        if Int(lighteningCountDown.text!)! >= 4 {
+        if Int(lighteningCountDown.text!)! >= 4 && questionsAsked <= 4 {
             loadNextRoundWithDelay(seconds: 2)
-        } else if Int(lighteningCountDown.text!)! < 4 {
+        } else if Int(lighteningCountDown.text!)! < 4 || questionsAsked == 5 {
             nextRound()
         }
         dimButtons(exceptChosen: sender)
@@ -178,12 +181,14 @@ class ViewController: UIViewController {
             correctWrong.alpha = 0
             let nextQestion = quizQuestionSet[questionsAsked].question
             questionField.text = nextQestion
-            let answersToQuestion = quizQuestionSet[questionsAsked].randomAnswersForButtons()
+            let answersToQuestion = quizQuestionSet[questionsAsked].randomAnswersForNumber(ofButtons: quizQuestionSet[questionsAsked].numberOfPossibleAnswersToQuestion())
+            setTitleForButtonsWith(answers: answersToQuestion)
+            /*
             answer1.setTitle(answersToQuestion[0], for: .normal)
             answer2.setTitle(answersToQuestion[1], for: .normal)
             answer3.setTitle(answersToQuestion[2], for: .normal)
             answer4.setTitle(answersToQuestion[3], for: .normal)
-        
+             */
         }
     }
     
@@ -204,12 +209,14 @@ class ViewController: UIViewController {
         let newQuestion = newQuestionSet.question
         questionField.text = newQuestion
         
-        possibleAnswers = newQuestionSet.randomAnswersForButtons()
+        possibleAnswers = quizQuestionSet[questionsAsked].randomAnswersForNumber(ofButtons: quizQuestionSet[questionsAsked].numberOfPossibleAnswersToQuestion())
+        setTitleForButtonsWith(answers: possibleAnswers)
+        /*
         answer1.setTitle(possibleAnswers[0], for: .normal)
         answer2.setTitle(possibleAnswers[1], for: .normal)
         answer3.setTitle(possibleAnswers[2], for: .normal)
         answer4.setTitle(possibleAnswers[3], for: .normal)
-        
+        */
         runTimer()
         self.view.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
         questionField.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
@@ -224,6 +231,30 @@ class ViewController: UIViewController {
     
     // MARK: Helper Methods
     
+            // Set title for buttons detirmened by number of possible answers
+    func setTitleForButtonsWith(answers: [String]) {
+        let fourButtonArray = [answer1, answer2, answer3, answer4]
+        let threeButtonArray = [answer1, answer2, answer3]
+        var index = 0
+        if answers.count == 4 {
+            brightenButtons()
+            for button in fourButtonArray {
+                button?.setTitle(answers[index], for: .normal)
+                if index <= 4 {
+                 index += 1
+                }
+            }
+        } else if answers.count == 3 {
+            for button in threeButtonArray {
+                button?.setTitle(answers[index], for: .normal)
+                if index <= 3 {
+                    index += 1
+                }
+            }
+            answer4.alpha = 0
+            answer4.isEnabled = false
+        }
+    }
 
             // Quiz timing to start lightening round
     func loadNextRoundWithDelay(seconds: Int) {
@@ -333,14 +364,22 @@ class ViewController: UIViewController {
     
     // dim buttons not chosen
     func dimButtons(exceptChosen button: UIButton) {
-        let buttonArray = [answer1, answer2, answer3, answer4]
-        for buttons in buttonArray {
-            if button != buttons {
-                buttons?.alpha = 0.5
-                
+        let fourButtonArray = [answer1, answer2, answer3, answer4]
+        let threeButtonArray = [answer1, answer2, answer3]
+        if answer4.isEnabled == true {
+            for buttons in fourButtonArray {
+                buttons?.isEnabled = false
+                if button != buttons {
+                    buttons?.alpha = 0.5
+                }
             }
-            buttons?.isEnabled = false
-            
+        } else {
+            for buttons in threeButtonArray {
+                buttons?.isEnabled = false
+                if button != buttons {
+                    buttons?.alpha = 0.5
+                }
+            }
         }
     }
     
@@ -348,10 +387,9 @@ class ViewController: UIViewController {
     func brightenButtons() {
         let buttonArray = [answer1, answer2, answer3, answer4]
         for buttons in buttonArray {
-            
-            buttons?.alpha = 1
-            buttons?.isEnabled = true
-        
+           
+                buttons?.alpha = 1
+                buttons?.isEnabled = true
         }
     }
 }

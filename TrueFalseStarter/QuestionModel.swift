@@ -17,23 +17,39 @@ struct QuestionModel {
     var possibleAnswerThree: String
     
     
-    func randomAnswersForButtons() -> [String] {
+    // determines the whether the question has 3 or 4 possible answers
+    func numberOfPossibleAnswersToQuestion() -> Int {
+        let possibleAnswers = GKRandomSource.sharedRandom().nextInt(upperBound: 10)
+        let possibleArray = [3, 4, 3, 4, 3, 4, 3, 4, 3, 4]
+        
+        return possibleArray[possibleAnswers]
+    }
+    
+    func randomAnswersForNumber(ofButtons buttons: Int) -> [String] {
         var answerArray = [String]()
         // stored property to establish number of buttons
-        let buttons = 4
-        var questionAnswers = [answer, possibleAnswerOne, possibleAnswerTwo, possibleAnswerThree]
+        let buttons = buttons
+        var fourAnswerQuestion = [answer, possibleAnswerOne, possibleAnswerTwo, possibleAnswerThree]
+        var threeAnswerQuestion = [answer, possibleAnswerOne, possibleAnswerTwo]
         var counter = 0
         
         for _ in 1...buttons {
-            counter = questionAnswers.count
-            let randomButton = GKRandomSource.sharedRandom().nextInt(upperBound: counter)
-            answerArray.append(questionAnswers[randomButton])
-            questionAnswers.remove(at: randomButton)
-            
+            if buttons == 4 {
+                counter = fourAnswerQuestion.count
+                let randomButton = GKRandomSource.sharedRandom().nextInt(upperBound: counter)
+                answerArray.append(fourAnswerQuestion[randomButton])
+                fourAnswerQuestion.remove(at: randomButton)
+            } else if buttons == 3 {
+                counter = threeAnswerQuestion.count
+                let randomButton = GKRandomSource.sharedRandom().nextInt(upperBound: counter)
+                answerArray.append(threeAnswerQuestion[randomButton])
+                threeAnswerQuestion.remove(at: randomButton)
+            }
         }
         
         return answerArray
     }
+
     
     
 }
