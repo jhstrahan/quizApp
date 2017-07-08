@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     // stored values for lightening round
     var lighteningTimer = Timer()
     var lighteningRound = Bool()
-    var seconds = 15
+    var seconds = 45
     var isTimerRunning = false
     
     // stored values for the quiz questions and answers
@@ -48,10 +48,11 @@ class ViewController: UIViewController {
         
         // Start game
         lighteningRound = true
-        lighteningRoundWithDelay(ofSeconds: 10)
+        runTimer()
         playGameStartSound()
         correctWrong.alpha = 0
-        lighteningCountDown.alpha = 0
+        lighteningCountDown.alpha = 1
+        lighteningCountDown.text = String(seconds)
     
         quizQuestionSet = QuestionSets().randomQuestionSets(forNumberOfQuestionsInQuiz: 6)
         let firstQuestion = quizQuestionSet[questionsAsked].question
@@ -109,7 +110,8 @@ class ViewController: UIViewController {
         
         if (sender === answer1 &&  correctAnswer == answer1.titleLabel?.text) || (sender === answer2 && correctAnswer == answer2.titleLabel?.text) || (sender === answer3 && correctAnswer == answer3.titleLabel?.text) || (sender === answer4 && correctAnswer == answer4.titleLabel?.text) {
             
-            dimButtons(exceptChosen: sender)
+            //dimButtons(exceptChosen: sender)
+            
             // play sounds corresponding with correctAnswersInARow
             correctQuestions += 1
             correctAnswersInARow += 1
@@ -142,7 +144,7 @@ class ViewController: UIViewController {
             correctWrong.textColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
             correctWrong.text = "The correct answer is \(correctAnswer)"
             
-            dimButtons(exceptChosen: sender)
+            //dimButtons(exceptChosen: sender)
             loadGameStartSound(forSound: Sounds().wrong)
             playGameStartSound()
             correctAnswersInARow = 0
@@ -150,10 +152,10 @@ class ViewController: UIViewController {
         }
         if Int(lighteningCountDown.text!)! >= 4 {
             loadNextRoundWithDelay(seconds: 2)
-        } else if questionsAsked == 4 {
+        } else if Int(lighteningCountDown.text!)! < 4 {
             nextRound()
         }
-        
+        dimButtons(exceptChosen: sender)
     }
     
     func nextRound() {
@@ -208,18 +210,21 @@ class ViewController: UIViewController {
         answer3.setTitle(possibleAnswers[2], for: .normal)
         answer4.setTitle(possibleAnswers[3], for: .normal)
         
-        lighteningRoundWithDelay(ofSeconds: 10)
+        runTimer()
         self.view.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
         questionField.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         correctWrong.alpha = 0
         brightenButtons()
-        seconds = 15
+        seconds = 45
+        lighteningCountDown.alpha = 1
         lighteningCountDown.text = timeString(time: TimeInterval(seconds))
     }
     
 
     
     // MARK: Helper Methods
+    
+
             // Quiz timing to start lightening round
     func loadNextRoundWithDelay(seconds: Int) {
         // Converts a delay in seconds to nanoseconds as signed 64 bit integer
@@ -232,7 +237,7 @@ class ViewController: UIViewController {
             self.nextRound()
         }
     }
-    
+    /*
     
     func lighteningRoundWithRemaining(seconds: Int) {
         let totalTime = Int64(NSEC_PER_SEC * UInt64(seconds))
@@ -276,6 +281,7 @@ class ViewController: UIViewController {
         }
     }
     
+ */
             // Timer during lightening mode
     func runTimer() {
         lighteningTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(ViewController.updateTimer)), userInfo: nil, repeats: true)
@@ -283,10 +289,28 @@ class ViewController: UIViewController {
     
     func updateTimer() {
         seconds -= 1
-        if Int(lighteningCountDown.text!)! >= 1 {
+        if Int(lighteningCountDown.text!)! > 15 {
+            self.view.backgroundColor = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
+            self.questionField.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            lighteningCountDown.alpha = 1
             lighteningCountDown.text = timeString(time: TimeInterval(seconds))
-        } else {
+        } else if Int(lighteningCountDown.text!)! <= 15 && Int(lighteningCountDown.text!)! >= 1 {
+            lighteningCountDown.alpha = 1
+            lighteningCountDown.text = timeString(time: TimeInterval(seconds))
+            loadGameStartSound(forSound: Sounds().start)
+            playGameStartSound()
+            view.backgroundColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
+            questionField.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            lighteningCountDown.textColor = #colorLiteral(red: 0.7233663201, green: 0.7233663201, blue: 0.7233663201, alpha: 1)
+        } else if Int(lighteningCountDown.text!)! == 0 {
             lighteningCountDown.alpha = 0
+            view.backgroundColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
+            displayScore()
+            correctWrong.alpha = 1
+            correctWrong.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            correctWrong.text = "Time's up!"
+            lighteningTimer.invalidate()
+            
         }
     }
     
@@ -313,7 +337,10 @@ class ViewController: UIViewController {
         for buttons in buttonArray {
             if button != buttons {
                 buttons?.alpha = 0.5
+                
             }
+            buttons?.isEnabled = false
+            
         }
     }
     
@@ -323,6 +350,7 @@ class ViewController: UIViewController {
         for buttons in buttonArray {
             
             buttons?.alpha = 1
+            buttons?.isEnabled = true
         
         }
     }
