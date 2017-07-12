@@ -13,13 +13,14 @@ import AudioToolbox
 class ViewController: UIViewController {
     
     // stored values for conters and number of questions per round
+    // questionsAsked manages the number of questions asked and the index for [quizQestionSet]
     let questionsPerRound = 5
     var questionsAsked = 0
     var correctQuestions = 0
     var correctAnswersInARow = 0
     
     
-    // stored values for lightening round
+    // stored values for lightening round and timer element
     var lighteningTimer = Timer()
     var lighteningRound = Bool()
     var seconds = 45
@@ -29,6 +30,7 @@ class ViewController: UIViewController {
     var quizQuestionSet = [QuestionModel]()
     var possibleAnswers = [String]()
     
+    // stored value for all loaded sounds
     var gameSound: SystemSoundID = 0
     
     
@@ -50,17 +52,10 @@ class ViewController: UIViewController {
         lighteningRound = true
         runTimer()
         playGameStartSound()
-        correctWrong.alpha = 0
-        lighteningCountDown.alpha = 1
-        lighteningCountDown.text = String(seconds)
-    
+        
+        // loads quiz Question into array and displays first question
         quizQuestionSet = QuestionSets().randomQuestionSets(forNumberOfQuestionsInQuiz: 6)
         let firstQuestion = quizQuestionSet[questionsAsked].question
-        questionField.text = firstQuestion
-        
-        
-        
-        
         
         
         // round the corners of each buttion
@@ -69,20 +64,17 @@ class ViewController: UIViewController {
         answer3.layer.cornerRadius = 10
         answer4.layer.cornerRadius = 10
         
-        // set titiles for buttons from asnwers to question.
         // questionsAsked provides an index of the array of quizQuestionSet
+        // sets titeles for answers randomly
         let answersToQuestion = quizQuestionSet[questionsAsked].randomAnswersForNumber(ofButtons: quizQuestionSet[questionsAsked].numberOfPossibleAnswersToQuestion())
         setTitleForButtonsWith(answers: answersToQuestion)
         
-        /*
-        answer1.setTitle(answersToQuestion[0], for: .normal)
-        answer2.setTitle(answersToQuestion[1], for: .normal)
-        answer3.setTitle(answersToQuestion[2], for: .normal)
-        answer4.setTitle(answersToQuestion[3], for: .normal)
-        */
-        
+        // manages outlets in view
+        correctWrong.alpha = 0
+        lighteningCountDown.alpha = 1
         playAgainButton.isHidden = true
-        
+        lighteningCountDown.text = String(seconds)
+        questionField.text = firstQuestion
     }
 
     override func didReceiveMemoryWarning() {
@@ -91,19 +83,7 @@ class ViewController: UIViewController {
     }
     
     
-    func displayScore() {
-        // Hide the answer buttons
-        answer1.isHidden = true
-        answer2.isHidden = true
-        answer3.isHidden = true
-        answer4.isHidden = true
-        // Display play again button
-        playAgainButton.isHidden = false
-        
-        questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
-        correctAnswersInARow = 0
-        
-    }
+    
     @IBAction func checkAnswer(_ sender: UIButton) {
         // Increment the questions asked counter
         
@@ -231,6 +211,23 @@ class ViewController: UIViewController {
     
     // MARK: Helper Methods
     
+    
+            // Game over view
+    func displayScore() {
+        // Hide the answer buttons
+        answer1.isHidden = true
+        answer2.isHidden = true
+        answer3.isHidden = true
+        answer4.isHidden = true
+        
+        // Display play again button
+        playAgainButton.isHidden = false
+        
+        questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
+        correctAnswersInARow = 0
+        
+    }
+    
             // Set title for buttons detirmened by number of possible answers
     func setTitleForButtonsWith(answers: [String]) {
         let fourButtonArray = [answer1, answer2, answer3, answer4]
@@ -260,6 +257,7 @@ class ViewController: UIViewController {
     func loadNextRoundWithDelay(seconds: Int) {
         // Converts a delay in seconds to nanoseconds as signed 64 bit integer
         let delay = Int64(NSEC_PER_SEC * UInt64(seconds))
+        
         // Calculates a time value to execute the method given current time and delay
         let dispatchTime = DispatchTime.now() + Double(delay) / Double(NSEC_PER_SEC)
         
@@ -268,56 +266,20 @@ class ViewController: UIViewController {
             self.nextRound()
         }
     }
-    /*
     
-    func lighteningRoundWithRemaining(seconds: Int) {
-        let totalTime = Int64(NSEC_PER_SEC * UInt64(seconds))
-        let dispatchTime = DispatchTime.now() + Double(totalTime) / Double(NSEC_PER_SEC)
-        
-        DispatchQueue.main.asyncAfter(deadline: dispatchTime) {
-            if self.lighteningRound == true {
-                self.view.backgroundColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-                self.displayScore()
-                self.correctWrong.alpha = 1
-                self.correctWrong.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-                self.correctWrong.text = "Time's up!"
-                self.lighteningCountDown.alpha = 0
-                self.lighteningTimer.invalidate()
-                
-            } else {
-                print("game over")
-            }
-        }
-        
-    }
-    
-    func lighteningRoundWithDelay(ofSeconds start: Int) {
-        let regularTime = Int64(NSEC_PER_SEC * UInt64(start))
-        
-        let startLighteningRound = DispatchTime.now() + Double(regularTime) / Double(NSEC_PER_SEC)
-        
-        
-        
-            if lighteningRound == true {
-                DispatchQueue.main.asyncAfter(deadline: startLighteningRound) {
-                    self.view.backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
-                    self.questionField.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-                    self.loadGameStartSound(forSound: Sounds().start)
-                    self.playGameStartSound()
-                    self.lighteningRoundWithRemaining(seconds: 15)
-                    self.lighteningCountDown.alpha = 1
-                    self.runTimer()
-                    
-            }
-        }
-    }
-    
- */
-            // Timer during lightening mode
+            // Timer during quiz
     func runTimer() {
         lighteningTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(ViewController.updateTimer)), userInfo: nil, repeats: true)
     }
     
+                    // proveds string for lighteningCountdown outlet
+    func timeString(time: TimeInterval) -> String {
+        let seconds = Int(time) % 60
+        return String(seconds)
+    }
+    
+                    // changes view appearance during lighning round
+                    // When timer 15sec lightening round begins
     func updateTimer() {
         seconds -= 1
         if Int(lighteningCountDown.text!)! > 15 {
@@ -345,10 +307,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func timeString(time: TimeInterval) -> String {
-        let seconds = Int(time) % 60
-        return String(seconds)
-    }
+    
     
     
             // loading and playing sounds

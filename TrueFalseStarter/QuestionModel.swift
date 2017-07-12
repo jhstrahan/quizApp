@@ -25,6 +25,7 @@ struct QuestionModel {
         return possibleArray[possibleAnswers]
     }
     
+    // determines the number of possible answers: 3 or 4
     func randomAnswersForNumber(ofButtons buttons: Int) -> [String] {
         var answerArray = [String]()
         // stored property to establish number of buttons
@@ -54,20 +55,22 @@ struct QuestionModel {
     
 }
 
+// models possible questions in quiz and possible answers for each question
 struct QuestionSets {
     let questionSet1 = QuestionModel(question: "Which planet in our solar system has the most oxygen?", answer: "Earth", possibleAnswerOne: "Saturn", possibleAnswerTwo: "Pluto", possibleAnswerThree: "Mars")
     let questionSet2 = QuestionModel(question: "What is the largest planet in our solar system?", answer: "Jupiter", possibleAnswerOne: "Neptune", possibleAnswerTwo: "Saturn", possibleAnswerThree: "Sun")
     let questionSet3 = QuestionModel(question: "What is the chemical symbol for table salt?", answer: "NaCl", possibleAnswerOne: "H2O", possibleAnswerTwo: "Sa", possibleAnswerThree: "Cl")
     let questionSet4 = QuestionModel(question: "In what year did the French revolution began?", answer: "1789", possibleAnswerOne: "1780", possibleAnswerTwo: "1812", possibleAnswerThree: "1788")
     let questionSet5 = QuestionModel(question: "How many feet are in a mile?", answer: "5280", possibleAnswerOne: "5000", possibleAnswerTwo: "4280", possibleAnswerThree: "5820")
-    let questionSet6 = QuestionModel(question: "The term wake, kettle, or committee refers to a group of what bird?", answer: "Vulture", possibleAnswerOne: "Crow", possibleAnswerTwo: "Red Bird", possibleAnswerThree: "Humming Bird")
-    let questionSet7 = QuestionModel(question: "Which of the traditional five senses are dolphins believed not to possess?", answer: "smell", possibleAnswerOne: "sight", possibleAnswerTwo: "touch", possibleAnswerThree: "taste")
+    let questionSet6 = QuestionModel(question: "The term wake or kettle refers to a group of what bird?", answer: "Vulture", possibleAnswerOne: "Crow", possibleAnswerTwo: "Red Bird", possibleAnswerThree: "Humming Bird")
+    let questionSet7 = QuestionModel(question: "Which of the five senses do dolphins not possess?", answer: "smell", possibleAnswerOne: "sight", possibleAnswerTwo: "touch", possibleAnswerThree: "taste")
     let questionSet8 = QuestionModel(question: "Flamboyance is a group of what animal?", answer: "Flamingos", possibleAnswerOne: "Owls", possibleAnswerTwo: "Monkeys", possibleAnswerThree: "Cats")
-    let questionSet9 = QuestionModel(question: "The Chihauahua is a breed of dog believed to originate from what country?", answer: "Mexico", possibleAnswerOne: "Alaska", possibleAnswerTwo: "Europe", possibleAnswerThree: "Spain")
+    let questionSet9 = QuestionModel(question: "The Chihauahua is a breed of dog from what country?", answer: "Mexico", possibleAnswerOne: "Alaska", possibleAnswerTwo: "Europe", possibleAnswerThree: "Spain")
     let questionSet10 = QuestionModel(question: "What is a group of whales called?", answer: "A pod", possibleAnswerOne: "A group", possibleAnswerTwo: "A family", possibleAnswerThree: "A mass")
     
     
-    
+    // choses random questions for the quiz without repeating any 
+    // question in the same quiz
     func randomQuestionSets(forNumberOfQuestionsInQuiz questions: Int) -> [QuestionModel] {
         var setsInQuiz = [QuestionModel]()
         var setsInDatabase = [QuestionSets().questionSet1, QuestionSets().questionSet2, QuestionSets().questionSet3, QuestionSets().questionSet4, QuestionSets().questionSet5, QuestionSets().questionSet6, QuestionSets().questionSet7, QuestionSets().questionSet8, QuestionSets().questionSet9, QuestionSets().questionSet10]
